@@ -36,6 +36,23 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+  <!-- Meta Tags Umum -->
+  <meta property="og:title" content="Judul Berita Anda">
+  <meta property="og:description" content="Deskripsi singkat berita Anda">
+  <meta property="og:image" content="URL Gambar Berita Anda">
+  <meta property="og:url" content="URL Lengkap Berita Anda">
+  <meta property="og:type" content="article">
+
+  <!-- Meta Tags Khusus Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Judul Berita Anda">
+  <meta name="twitter:description" content="Deskripsi singkat berita Anda">
+  <meta name="twitter:image" content="URL Gambar Berita Anda">
+
+  <!-- Meta Tags Khusus WhatsApp -->
+  <meta property="og:site_name" content="https://babayaga024.github.io/r/">
+
 </head>
 
 <body class="blog-details-page">
@@ -232,8 +249,24 @@
           const obj = await response.json()
           // console.log(obj.data);
           show(obj.data);
+          setMetaTags(obj.data);
         } catch (err) {
           console.log(err)
+        }
+      }
+
+      function setMetaTags(data) {
+        if (data) {
+          // Set meta tags untuk Open Graph (Facebook, WhatsApp, dll.)
+          document.querySelector('meta[property="og:title"]').setAttribute('content', data.title);
+          document.querySelector('meta[property="og:description"]').setAttribute('content', data.content.substring(0, 160)); // Ambil 160 karakter pertama
+          document.querySelector('meta[property="og:image"]').setAttribute('content', data.image);
+          document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
+
+          // Set meta tags untuk Twitter
+          document.querySelector('meta[name="twitter:title"]').setAttribute('content', data.title);
+          document.querySelector('meta[name="twitter:description"]').setAttribute('content', data.content.substring(0, 160));
+          document.querySelector('meta[name="twitter:image"]').setAttribute('content', data.image);
         }
       }
 
