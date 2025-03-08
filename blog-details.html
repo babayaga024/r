@@ -256,17 +256,18 @@
       }
 
       function setMetaTags(data) {
+        const image = `https://babayaga024.github.io/r/${data.image}`
         if (data) {
           // Update meta tags untuk Open Graph (Facebook, WhatsApp, dll.)
           document.querySelector('meta[property="og:title"]').setAttribute('content', data.title);
           document.querySelector('meta[property="og:description"]').setAttribute('content', data.content.substring(0, 160)); // Ambil 160 karakter pertama
-          document.querySelector('meta[property="og:image"]').setAttribute('content', data.image);
+          document.querySelector('meta[property="og:image"]').setAttribute('content', image);
           document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
 
           // Update meta tags untuk Twitter
           document.querySelector('meta[name="twitter:title"]').setAttribute('content', data.title);
           document.querySelector('meta[name="twitter:description"]').setAttribute('content', data.content.substring(0, 160));
-          document.querySelector('meta[name="twitter:image"]').setAttribute('content', data.image);
+          document.querySelector('meta[name="twitter:image"]').setAttribute('content', image);
         }
       }
 
