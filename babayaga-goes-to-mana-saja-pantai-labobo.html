@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Blog - Babayaga</title>
+  <title>Babayaga</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -36,9 +36,26 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+  <!-- Meta Tags Dinamis -->
+  <meta property="og:title" content="Babayaga Goes to Mana Saja : Pantai Labobo">
+  <meta property="og:description" content="Seperti biasa, babayaga selalu mengadakan agenda rutin tahunan yang bertajuk babayaga goes to mana saja. Kali ini babayaga...">
+  <meta property="og:image" content="https://babayaga024.github.io/r/assets/img/babayaga-herro-lp.jpeg">
+  <meta property="og:url" content="https://babayaga024.github.io/r/babayaga-goes-to-mana-saja-pantai-labobo.html">
+  <meta property="og:type" content="article">
+
+  <!-- Meta Tags Khusus Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <!-- Meta Tags Khusus WhatsApp -->
+  <meta property="og:site_name" content="https://babayaga024.github.io/r/">
+
 </head>
 
-<body class="blog-page">
+<body class="blog-details-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
@@ -51,7 +68,7 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="/" class="active">Home<br></a></li>
+          <li><a href="index.html" class="active">Home<br></a></li>
           <li><a href="#">About</a></li>
           <!-- <li><a href="services.html">Services</a></li>
           <li><a href="portfolio.html">Portfolio</a></li> -->
@@ -88,11 +105,11 @@
     <div class="page-title dark-background" data-aos="fade"
       style="background-image: url(assets/img/babayaga-herro-lp.jpeg);">
       <div class="container">
-        <h1>Blog</h1>
+        <h1>Detail Blog</h1>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.html">Home</a></li>
-            <li class="current">Blog</li>
+            <li class="current">Detail Blog</li>
           </ol>
         </nav>
       </div>
@@ -103,36 +120,15 @@
 
         <div class="col-lg-8">
 
-          <!-- Blog Posts Section -->
-          <section id="blog-posts" class="blog-posts section">
-
+          <!-- Blog Details Section -->
+          <section id="blog-details" class="blog-details section">
             <div class="container">
-              <div class="row gy-4" id="all-posts">
 
+              <div id="berita-detail" class="post-content">
               </div>
+
             </div>
-
-          </section><!-- /Blog Posts Section -->
-
-          <!-- Blog Pagination Section -->
-          <section id="blog-pagination" class="blog-pagination section">
-
-            <!-- <div class="container">
-              <div class="d-flex justify-content-center">
-                <ul>
-                  <li><a href="#"><i class="bi bi-chevron-left"></i></a></li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#" class="active">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li>...</li>
-                  <li><a href="#">10</a></li>
-                  <li><a href="#"><i class="bi bi-chevron-right"></i></a></li>
-                </ul>
-              </div>
-            </div> -->
-
-          </section><!-- /Blog Pagination Section -->
+          </section><!-- /Blog Details Section -->
 
         </div>
 
@@ -144,6 +140,7 @@
             <div class="recent-posts-widget widget-item">
 
               <h3 class="widget-title">Postingan Terbaru</h3>
+
               <div id="recent-posts"></div>
 
             </div><!--/Recent Posts Widget -->
@@ -242,46 +239,85 @@
   <script src="assets/js/main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const url = 'https://script.google.com/macros/s/AKfycbwz4aAFzHUujRWwGFCPzhSxxp6mnl4ntZDmBJJZvsxBONS2052TpyJnZ0EXiKXecl5t/exec?action=get-all-data'
+      // Extract the slug from the URL (e.g., contoh-berita-1.html -> contoh-berita-1)
+      const currentFile = window.location.pathname.split('/').pop().replace('.html', '');
+      const url = "https://script.google.com/macros/s/AKfycbwz4aAFzHUujRWwGFCPzhSxxp6mnl4ntZDmBJJZvsxBONS2052TpyJnZ0EXiKXecl5t/exec";
+
+      async function getNewsBySlug(slug) {
+        try {
+          const response = await fetch(url + `?action=news-by-slug&slug=${slug}`);
+          const obj = await response.json();
+          if (obj.data) {
+            show(obj.data);
+            setMetaTags(obj.data);
+          } else {
+            document.getElementById('berita-detail').innerHTML = '<p>Berita tidak ditemukan.</p>';
+          }
+        } catch (err) {
+          console.log(err);
+          document.getElementById('berita-detail').innerHTML = '<p>Terjadi kesalahan saat memuat berita.</p>';
+        }
+      }
+
+      function setMetaTags(data) {
+        const image = `https://babayaga024.github.io/r/${data.image}`;
+        if (data) {
+          // Update meta tags for Open Graph (Facebook, WhatsApp, etc.)
+          document.querySelector('meta[property="og:title"]').setAttribute('content', data.title);
+          document.querySelector('meta[property="og:description"]').setAttribute('content', data.content.substring(0, 160)); // Take the first 160 characters
+          document.querySelector('meta[property="og:image"]').setAttribute('content', image);
+          document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href);
+
+          // Update meta tags for Twitter
+          document.querySelector('meta[name="twitter:title"]').setAttribute('content', data.title);
+          document.querySelector('meta[name="twitter:description"]').setAttribute('content', data.content.substring(0, 160));
+          document.querySelector('meta[name="twitter:image"]').setAttribute('content', image);
+        }
+      }
 
       async function getAllNews() {
         try {
-          const response = await fetch(url)
-          const obj = await response.json()
-          show(obj.data);
+          const response = await fetch(url + "?action=get-all-data");
+          const obj = await response.json();
           recentPost(obj.data);
         } catch (err) {
-          console.log(err)
+          console.log(err);
         }
       }
 
       function show(data) {
-        const allPostsContainer = document.getElementById('all-posts');
-        data.forEach(post => {
-          const postElement = document.createElement('div');
-          postElement.classList.add('col-lg-6');
-          postElement.innerHTML = `
-            <article>
-              <div class="post-img">
-                <img src="${post.image}" alt="" class="img-fluid">
-              </div>
-              <p class="post-category">${post.category || 'Bebas Lepas'}</p>
-              <h2 class="title">
-                <a href="${post.slug}.html">${post.title}</a> <!-- Ubah link ke <nama_slug>.html -->
-              </h2>
-              <div class="d-flex align-items-center">
-                <img src="assets/img/image-pp-admin.png" alt="" class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">${post.author}</p>
-                  <p class="post-date">
-                    <time datetime="${new Date(post.date).toISOString()}">${new Date(post.date).toLocaleDateString('id-ID')}</time>
-                  </p>
-                </div>
-              </div>
-            </article>
-          `;
-          allPostsContainer.appendChild(postElement);
-        });
+        if (data != null) {
+          const beritaDetail = document.getElementById('berita-detail');
+          beritaDetail.innerHTML = `
+        <div class="post-img">
+          <img src="${data.image}" alt="" class="img-fluid">
+        </div>
+        <h2 class="title">${data.title}</h2>
+        <div class="meta-top">
+          <ul>
+            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">${data.author}</a></li>
+            <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time>${new Date(data.date).toLocaleDateString('id-ID')}</time></a></li>
+          </ul>
+        </div>
+        <div class="content">
+          <p>${data.content}</p>
+        </div>
+      `;
+          // Loop through images if available
+          if (data.images && data.images.length > 0) {
+            data.images.forEach(image => {
+              if (image) { // Ensure the image is not empty
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+                imgElement.alt = data.title;
+                imgElement.classList.add('img-fluid', 'mt-3');
+                beritaDetail.appendChild(imgElement);
+              }
+            });
+          }
+        } else {
+          document.getElementById('berita-detail').innerHTML = '<p>Berita tidak ditemukan.</p>';
+        }
       }
 
       function recentPost(data) {
@@ -292,17 +328,19 @@
           const postItem = document.createElement('div');
           postItem.classList.add('post-item');
           postItem.innerHTML = `
-            <img src="${post.image}" alt="" class="flex-shrink-0">
-            <div>
-              <h4><a href="${post.slug}.html">${post.title}</a></h4> <!-- Ubah link ke <nama_slug>.html -->
-              <time datetime="${new Date(post.date).toISOString()}">${new Date(post.date).toLocaleDateString('id-ID')}</time>
-            </div>
-          `;
+        <img src="${post.image}" alt="" class="flex-shrink-0">
+        <div>
+          <h4><a href="${post.slug}.html">${post.title}</a></h4>
+          <time datetime="${new Date(post.date).toISOString()}">${new Date(post.date).toLocaleDateString('id-ID')}</time>
+        </div>
+      `;
           recentPostsContainer.appendChild(postItem);
         });
       }
 
-      getAllNews()
+      // Fetch and display the news based on the slug
+      getNewsBySlug(currentFile);
+      getAllNews();
     });
   </script>
 
